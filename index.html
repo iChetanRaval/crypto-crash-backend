@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Crypto Crash WS Client</title>
+</head>
+
+<body>
+  <p id="multiplier">Waiting for round...</p>
+  <button onclick="cashout()">Cashout</button>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script>
+    const socket = io('http://localhost:5000');
+    socket.on('roundStart', data => { document.getElementById('multiplier').textContent = 'Round started!' });
+    socket.on('multiplierUpdate', data => { document.getElementById('multiplier').textContent = `Multiplier: ${data.multiplier}x` });
+    socket.on('roundCrash', data => { document.getElementById('multiplier').textContent = `Crashed at ${data.crashPoint}x`; });
+    function cashout() {
+      socket.emit('cashout', { playerId: '<PUT_PLAYER_ID_HERE>' });
+    }
+  </script>
+</body>
+
+</html>
